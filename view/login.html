@@ -1,0 +1,79 @@
+<html>
+<head>
+<title>GHMC Student Information Form</title>
+<link rel="stylesheet" type="text/css" href="../scripts/style.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="../scripts/cookie.js"></script>
+<style>
+#result {
+	display: none;
+}
+</style>
+</head>
+<body>
+<div class="header">
+      </div>
+	  
+	  <div class="table1">
+	  <h1 align="left">Admin  Login</h1>
+	  <form id = "login" action="../model/login.php" method="POST">
+      <table width="800">
+      <tr><td>Username:</td><td><input type="text" name="username"></td></tr>
+      <tr><td>Password:</td><td><input type="password" name="password"></td></tr>
+      <tr><td><input id="form-submit" type ="submit" value="Submit"></td>
+	  </tr></table>
+	  </form>
+      </div>
+	  
+	  <div id ="logtry"><span id ="result"></span></div></div>
+<div class="footer"><p>MVSR Engineering College||Developed by MV Siva Abhishek, MPP</p>
+<p> Form to gather information about students of MVSR Engineering College as requested by Greater Municipal Corporation of Hyderabad</p></div>
+</body>
+<script>
+//Clear Cookie
+var user = getCookie("username");
+user ="";
+
+var body = document.getElementsByTagName("body");
+var result = document.getElementById("result");
+var button = document.getElementById("form-submit");
+var form = document.getElementById("login");
+
+
+//Display result on page if login failed.
+function confirmation(result){
+	body.innerHTML = result;
+
+}
+
+//Function to submit form data and post it to server-side for login process.
+function submit(form){
+	
+	var array = [];
+	var inputs = form.getElementsByTagName("input");
+	var username = inputs[0].value;
+	for(i = 0; i<2; i++){
+		inputNameandValue = inputs[i].name +"=" +inputs[i].value;
+		array.push(inputNameandValue);
+	}
+	var form_data = array.join("&");
+	console.log(form_data);
+	var xhr = new XMLHttpRequest();
+	xhr.open("post","../model/login.php", true);
+	xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+	xhr.onreadystatechange = function () {
+          if(xhr.readyState == 4 && xhr.status == 200) {
+          setCookie("username",username,1);
+		  window.location.href="../view/student.php";          
+          }
+	};
+	xhr.send(form_data);
+}
+//Call submit function on clicking submit button.
+	button.addEventListener("click", function(event){
+	event.preventDefault();
+	submit(form);
+	});
+
+</script>
+</html>
